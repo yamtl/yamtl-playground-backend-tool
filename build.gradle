@@ -1,0 +1,35 @@
+plugins {
+    id 'groovy'
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://github.com/yamtl/yamtl.github.io/raw/master/mvn-repo/snapshot-repo'
+    }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    testImplementation 'junit:junit:4.13.2'
+
+
+    implementation 'yamtl:yamtl:0.4.29'
+    implementation 'net.sourceforge.plantuml:plantuml-mit:1.2023.12'
+    implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.34.0'
+    implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.18.0'
+    implementation 'org.eclipse.emf:org.eclipse.emf.ecore.change:2.14.0'
+    implementation 'org.eclipse.xtend:org.eclipse.xtend.core:2.31.0'
+    implementation 'org.aspectj:aspectjweaver:1.9.19'
+    implementation 'org.springframework.boot:spring-boot-starter-aop:3.1.0'
+    implementation 'org.apache.groovy:groovy-all:4.0.15'
+
+    testImplementation 'io.rest-assured:rest-assured:5.3.2'
+    implementation 'org.apache.groovy:groovy-json:4.0.15'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17

@@ -1,2 +1,3 @@
-# yamtl-aws-services
-YAMTL services exposed as AWS lambda functions
+# YAMTL AWS Services
+
+YAMTL services exposed as AWS lambda functions.

@@ -1,0 +1,41 @@
+@startuml
+object ":Class" as 1855997464 #03E2B958
+1855997464 : name = "Item"
+1855997464 : isAbstract = false
+object ":Attribute" as 1403380247 #7839CA7C
+1403380247 : name = "product"
+1403380247 : multiValued = true
+object ":Attribute" as 1649026294 #7839CA7C
+1649026294 : name = "date"
+1649026294 : multiValued = false
+object ":Attribute" as 112200409 #7839CA7C
+112200409 : name = "customer"
+112200409 : multiValued = false
+object ":Class" as 1842881670 #03E2B958
+1842881670 : name = "Order"
+1842881670 : isAbstract = false
+object ":Attribute" as 864864095 #7839CA7C
+864864095 : name = "items"
+864864095 : multiValued = true
+object ":Class" as 1443335402 #03E2B958
+1443335402 : name = "Customer"
+1443335402 : isAbstract = false
+object ":Attribute" as 1329938019 #7839CA7C
+1329938019 : name = "name"
+1329938019 : multiValued = false
+object ":DataType" as 1510009630 #6E7D7224
+1510009630 : name = "String"
+object ":DataType" as 922547904 #6E7D7224
+922547904 : name = "Integer"
+1855997464 "owner" *-- "attr" 112200409
+1842881670 "owner" *-- "attr" 864864095
+1443335402 "owner" *-- "attr" 1329938019
+1403380247 --> "type" 1510009630
+1855997464 "owner" *-- "attr" 1649026294
+112200409 --> "type" 1443335402
+1329938019 --> "type" 1510009630
+1855997464 "owner" *-- "attr" 1403380247
+864864095 --> "type" 1855997464
+1649026294 --> "type" 1510009630
+
+@enduml

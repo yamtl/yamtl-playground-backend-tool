@@ -1,0 +1,36 @@
+@startuml
+abstract class NamedElt #719626D4 {
+	String name
+}
+abstract class Classifier #660AF641 {
+}
+class DataType #6E7D7224 {
+}
+class Class #03E2B958 {
+	Boolean isAbstract
+}
+class Attribute #7839CA7C {
+	Boolean multiValued
+}
+class Package #331DCC26 {
+}
+class Boolean #67140408 {
+	java.lang.Boolean
+}
+class Integer #D7EE191E {
+	java.lang.Integer
+}
+class String #943A4C31 {
+	java.lang.String
+}
+NamedElt <|-- Classifier
+Classifier <|-- DataType
+Classifier <|-- Class
+NamedElt <|-- Attribute
+Classifier <|-- Package
+Class --> "super *" Class
+Class "owner" *-- "attr *" Attribute
+Attribute --> "type" Classifier
+Package *--> "classifiers *" Classifier
+
+@enduml
