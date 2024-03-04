@@ -3,6 +3,7 @@ package Utils
 import groovy.io.FileType
 import yamtl.core.YAMTLModule
 import yamtl_m2m.StringUtil
+import api.App
 
 class Utils {
     /**
@@ -33,9 +34,9 @@ class Utils {
         def metamodelContent = request[requestFieldName] as String
         metamodelContent = StringUtil.removeEscapeChars(metamodelContent)
 
-        String metamodelPath = "/tmp/${className}/${requestFieldName}_metamodel.ecore"
+        String metamodelPath = "${App.TMP_DIR}/${className}/${requestFieldName}_metamodel.ecore"
         if (metamodelContent.startsWith("@namespace")) {
-            metamodelPath = "/tmp/${className}/${requestFieldName}_metamodel.emf"
+            metamodelPath = "${App.TMP_DIR}/${className}/${requestFieldName}_metamodel.emf"
         }
 
         def file = new File(metamodelPath)
@@ -53,10 +54,10 @@ class Utils {
     }
 
     def static initDirectory(String directoryName) {
-        def rootDirectory = new File("/tmp/")
+        def rootDirectory = new File("${App.TMP_DIR}")
         if (!rootDirectory.exists()) rootDirectory.mkdirs()
 
-        def directory = new File("/tmp/${directoryName}")
+        def directory = new File("${App.TMP_DIR}/${directoryName}")
 
         if (directory.exists()) {
             // Delete the existing directory and its contents recursively

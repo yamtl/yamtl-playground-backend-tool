@@ -1,7 +1,9 @@
 plugins {
     id 'groovy'
     id 'idea'
+    id 'com.adarshr.test-logger' version '4.0.0'
 }
+
 
 repositories {
     mavenCentral()
@@ -29,6 +31,33 @@ dependencies {
 
     testImplementation 'io.rest-assured:rest-assured:5.3.2'
     implementation 'org.apache.groovy:groovy-json:4.0.15'
+}
+
+testlogger {
+    theme = 'mocha'
+    showExceptions = true
+    showStackTraces = true
+    showFullStackTraces = false
+    showCauses = true
+    slowThreshold = 2000
+    showSummary = true
+    showSimpleNames = false
+    showPassed = true
+    showSkipped = true
+    showFailed = true
+    showOnlySlow = false
+    showStandardStreams = false
+    showPassedStandardStreams = true
+    showSkippedStandardStreams = true
+    showFailedStandardStreams = true
+    logLevel = LogLevel.LIFECYCLE
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
 }
 
 sourceCompatibility = 17

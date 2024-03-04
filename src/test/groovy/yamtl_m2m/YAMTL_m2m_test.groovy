@@ -43,6 +43,7 @@ class YAMTL_m2m_test {
 
 		String content = result.getBody();
 		assertNotNull(content);
+		println(content);
 
 		def jsonSlurper = new JsonSlurper()
 		def response = jsonSlurper.parseText(content);

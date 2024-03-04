@@ -12,6 +12,7 @@ import yamtl_m2m.RunYAMTL_m2m_groovy
 import prettyprinter.Ecore2ClassDiagram
 
 class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    static String TMP_DIR = "./tmp"
 
     def APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
         def message
@@ -79,8 +80,9 @@ class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxy
                 'Content-Type': 'application/json',
                 'X-Custom-Header': 'application/json',
                 // to enable CORS
-//                'Access-Control-Allow-Origin': 'https://yamtl.github.io',
-                'Access-Control-Allow-Origin': '*', // for all or specify the origin you want to allow
+                'Access-Control-Allow-Origin': 'https://yamtl.github.io',
+                // 'Access-Control-Allow-Origin': '*', // for all or specify the origin you want to allow
+                'Access-Control-Allow-Credentials': true,
                 'Access-Control-Allow-Headers':	'Content-Type',
                 'Access-Control-Allow-Methods':	'OPTIONS,POST,GET' // Allowed methods
         ]

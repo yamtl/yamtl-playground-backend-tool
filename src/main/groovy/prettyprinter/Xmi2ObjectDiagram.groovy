@@ -7,7 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import prettyprinting.EMFPrettyPrinter
 import yamtl_m2m.StringUtil
-
+import api.App
 
 /**
  * Parameters:
@@ -31,7 +31,7 @@ class Xmi2ObjectDiagram {
             def mmPath = Utils.saveMetamodelToFile(directory, request, "metamodel")
 
             // store model
-            String modelPath = "/tmp/${directory}/model.xmi"
+            String modelPath = "${App.TMP_DIR}/${directory}/model.xmi"
             def file = new File(modelPath)
             if (file.exists()) file.delete()
             file << StringUtil.removeEscapeChars(request['model'].toString())

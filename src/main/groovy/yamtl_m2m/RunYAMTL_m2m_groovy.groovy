@@ -13,6 +13,8 @@ import groovy.io.FileType
 import yamtl.core.YAMTLModule
 import yamtl.groovy.YAMTLGroovyExtensions_dynamicEMF
 
+import api.App
+
 class RunYAMTL_m2m_groovy {
 	private static final Logger logger = LoggerFactory.getLogger(RunYAMTL_m2m_groovy.class);
 	
@@ -65,7 +67,7 @@ class RunYAMTL_m2m_groovy {
 			
 			// Load input model
 			def inDomainName = xform.getInDomains().find { it.value == inPk.getNsURI() }.key
-			String inModelPath = "/tmp/${className}/inModel.xmi"
+			String inModelPath = "${App.TMP_DIR}/${className}/inModel.xmi"
 			def file = new File(inModelPath)
 			file << StringUtil.removeEscapeChars(request['inModel'].toString())
 			xform.loadInputModels([(inDomainName):inModelPath])
@@ -75,7 +77,7 @@ class RunYAMTL_m2m_groovy {
 
 			// Get the output model
 			def outDomainName = xform.getOutDomains().find { it.value == outPk.getNsURI() }.key
-			String outModelPath = "/tmp/${className}/outModel.xmi"
+			String outModelPath = "${App.TMP_DIR}/${className}/outModel.xmi"
 			xform.saveOutputModels([(outDomainName):outModelPath])
 
 

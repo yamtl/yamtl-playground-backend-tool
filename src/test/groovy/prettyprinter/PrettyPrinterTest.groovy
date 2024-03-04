@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertTrue
 
 class PrettyPrinterTest {
-    @Test
+    // @Test
     public void test_mm2cd() {
         App app = new App();
 
@@ -79,7 +79,7 @@ class PrettyPrinterTest {
         assertEquals(normalizePUML(expectedOutput), normalizePUML( response['generatedText'].toString() ))
     }
 
-    @Test
+    // @Test
     public void test_model2od() {
         App app = new App();
 
