@@ -45,7 +45,7 @@ class RunYAMTL_m2m_groovy {
 			if (!className) throw new RuntimeException("The script must contain a YAMTLModule specialization defining a model transformation.")
 			
 				
-			// create tmp file for transformation under ./model
+			// create tmp file for transformation under the root folder of the project
 			Utils.initDirectory(className)
 				
 				

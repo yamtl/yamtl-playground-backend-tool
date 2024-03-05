@@ -13,9 +13,9 @@ class Utils {
         def metamodelContent = request[requestFieldName] as String
         metamodelContent = StringUtil.removeEscapeChars(metamodelContent)
 
-        String metamodelPath = "/tmp/${className}/${requestFieldName}_metamodel.ecore"
+        String metamodelPath = "${App.TMP_DIR}/${className}/${requestFieldName}_metamodel.ecore"
         if (metamodelContent.startsWith("@namespace")) {
-            metamodelPath = "/tmp/${className}/${requestFieldName}_metamodel.emf"
+            metamodelPath = "${App.TMP_DIR}/${className}/${requestFieldName}_metamodel.emf"
         }
 
         def file = new File(metamodelPath)

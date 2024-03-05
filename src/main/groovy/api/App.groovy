@@ -12,7 +12,7 @@ import yamtl_m2m.RunYAMTL_m2m_groovy
 import prettyprinter.Ecore2ClassDiagram
 
 class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    static String TMP_DIR = "./tmp"
+    static String TMP_DIR = "/tmp" // this is the only directory available at runtime for AWS lambda functions
 
     def APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
         def message
