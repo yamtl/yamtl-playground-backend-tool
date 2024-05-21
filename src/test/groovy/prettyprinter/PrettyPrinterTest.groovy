@@ -79,6 +79,48 @@ class PrettyPrinterTest {
         assertEquals(normalizePUML(expectedOutput), normalizePUML( response['generatedText'].toString() ))
     }
 
+
+    @Test
+    public void test_emf2json() {
+        App app = new App();
+
+        def requestBuilder = new JsonBuilder()
+        requestBuilder {
+            metamodel  new File('./model/CD.emf').text
+        }
+
+        // Creating a request with a JSON body containing a name
+        APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent();
+        requestEvent.withBody(requestBuilder.toString())
+                .withResource("/emf2json");
+
+        APIGatewayProxyResponseEvent result = app.handleRequest(requestEvent, null);
+
+
+        assertEquals(200, result.getStatusCode().intValue());
+        assertEquals("application/json", result.getHeaders().get("Content-Type"));
+
+
+        String content = result.getBody();
+        assertNotNull(content);
+
+        def jsonSlurper = new JsonSlurper()
+        def response = jsonSlurper.parseText(content);
+        // Check the result
+        def expectedOutput = new File('./model/CD.json').text
+        assertEquals(normalizePUML(expectedOutput), normalizePUML(response['generatedText'].toString()) )
+    }
+
+
+
+
+
+
+
+
+
+
+
     // @Test
     public void test_model2od() {
         App app = new App();
@@ -162,7 +204,7 @@ class PrettyPrinterTest {
 
         text = text.replaceAll(/\b\d+\b/, ' ')
         // Remove white spaces and line breaks
-        text = text.replaceAll(/\s+/, ' ').replaceAll(/\r\n/,'').replaceAll(/\n/,'')
+        text = text.replaceAll(/\s+/, '').replaceAll(/\r\n/,'').replaceAll(/\n/,'')
 
         // Remove dynamic attributes (e.g., timestamps)
 //        text = text.replaceAll(/(timestamp|version)="[^"]*"/, '')

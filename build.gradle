@@ -19,7 +19,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
 
-    implementation 'yamtl:yamtl:0.4.29'
+    implementation 'yamtl:yamtl:0.4.32'
+    implementation 'yamtl:yamtl.groovy:0.4.32'
     implementation 'net.sourceforge.plantuml:plantuml-mit:1.2023.12'
     implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.34.0'
     implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.18.0'

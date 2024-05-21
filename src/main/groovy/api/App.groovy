@@ -8,6 +8,7 @@ import groovy.json.JsonSlurper
 import prettyprinter.Ecore2ClassDiagramPlantUML
 import prettyprinter.Xmi2ObjectDiagram
 import prettyprinter.Xmi2ObjectDiagramPlantUML
+import prettyprinter.Emf2Json
 import yamtl_m2m.RunYAMTL_m2m_groovy
 import prettyprinter.Ecore2ClassDiagram
 
@@ -33,6 +34,9 @@ class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxy
                 break
             case '/xmi2od_puml':
                 message = Xmi2ObjectDiagramPlantUML.run(input.getBody())
+                break
+            case '/emf2json':
+                message = Emf2Json.run(input.getBody())
                 break
 
                 /**
