@@ -19,9 +19,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
 
-    implementation 'yamtl:yamtl:0.4.35'
-    implementation 'yamtl:yamtl.groovy:0.4.35'
-    implementation 'yamtl:yamtl.flexible-models:0.4.35'
+    implementation 'yamtl:yamtl:0.4.36'
+    implementation 'yamtl:yamtl.groovy:0.4.36'
+    implementation 'yamtl:yamtl.flexible-models:0.4.36'
 
     implementation "org.yaml:snakeyaml:2.2"
 
