@@ -25,7 +25,7 @@ class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxy
             case '/yamtl_m2m':
                 message = RunYAMTL_m2m_groovy.run(input.getBody())
                 break
-            case '/yamtl_m2m_one_mm':
+            case '/yamtl_m2m_from_flexible':
                 message = RunYAMTL_m2m_from_flexible_to_mm.run(input.getBody())
                 break
             case '/yamtl_queryDsl':

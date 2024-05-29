@@ -34,7 +34,7 @@ class YAMTL_m2m_from_flexible_to_mm_test
 		// Creating a request with a JSON body containing a name
 		APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent();
 		requestEvent.withBody(requestBuilder.toString())
-				.withResource("/yamtl_m2m_one_mm");
+				.withResource("/yamtl_m2m_from_flexible");
 
 		APIGatewayProxyResponseEvent result = app.handleRequest(requestEvent, null);
 
