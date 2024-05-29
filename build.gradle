@@ -22,7 +22,9 @@ dependencies {
     implementation 'yamtl:yamtl:0.4.35'
     implementation 'yamtl:yamtl.groovy:0.4.35'
     implementation 'yamtl:yamtl.flexible-models:0.4.35'
-    
+
+    implementation "org.yaml:snakeyaml:2.2"
+
     implementation 'net.sourceforge.plantuml:plantuml-mit:1.2023.12'
     implementation 'org.eclipse.emf:org.eclipse.emf.ecore:2.34.0'
     implementation 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.18.0'

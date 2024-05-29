@@ -5,6 +5,12 @@ import yamtl.core.YAMTLModule
 import yamtl_m2m.StringUtil
 import api.App
 
+
+import org.yaml.snakeyaml.Yaml
+import groovy.json.JsonSlurper
+import groovy.xml.XmlParser
+import groovy.xml.XmlUtil
+
 class Utils {
     /**
      * returns the path where the metamodel is stored
@@ -71,4 +77,60 @@ class Utils {
         directory.mkdirs()
     }
 
+
+
+    def static String detectFormat(String text) {
+        if (isJson(text)) {
+            return "json"
+        } else if (isYaml(text)) {
+            return "yml"
+        } else if (isXml(text)) {
+            return "xml"
+        } else if (isCsv(text)) {
+            return "csv"
+        } else {
+            return "xmi"
+        }
+    }
+
+    def static boolean isJson(String text) {
+        try {
+            new JsonSlurper().parseText(text)
+            return true
+        } catch (Exception e) {
+            return false
+        }
+    }
+
+    def static boolean isYaml(String text) {
+        try {
+            new Yaml().load(text)
+            return true
+        } catch (Exception e) {
+            return false
+        }
+    }
+
+    def static boolean isXml(String text) {
+        try {
+            new XmlParser().parseText(text)
+            return true
+        } catch (Exception e) {
+            return false
+        }
+    }
+
+    def static boolean isCsv(String text) {
+        def lines = text.split("\n")
+        if (lines.size() < 2) {
+            return false
+        }
+        def headers = lines[0].split(",")
+        if (headers.size() < 2) {
+            return false
+        }
+        return lines.every { it.split(",").size() == headers.size() }
+    }
 }
+
+
