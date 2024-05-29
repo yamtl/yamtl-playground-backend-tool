@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import yamtl.core.YAMTLModule
 import org.eclipse.emf.ecore.EcorePackage
+import yamtl.bindingSource.Databinding;
 
 /**
  * Parameters:
@@ -36,7 +37,7 @@ class Emf2Json extends YAMTLModule {
             def xform = new Emf2Json()
             def pk = xform.loadMetamodel(mmPath - 'file:///')
             xform.loadInputResources(["in": pk])
-            def jsonText = xform.exportUntypedModelToJson("in");
+            def jsonText = xform.toText(Databinding.JSON,"in");
 
             // Return the xmi contents
             response = new JsonBuilder()
