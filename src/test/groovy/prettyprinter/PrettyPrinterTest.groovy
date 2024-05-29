@@ -6,7 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.junit.Test
-import yamtl_m2m.StringUtil
+import Utils.StringUtil
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull

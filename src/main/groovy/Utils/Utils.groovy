@@ -2,7 +2,7 @@ package Utils
 
 import groovy.io.FileType
 import yamtl.core.YAMTLModule
-import yamtl_m2m.StringUtil
+import Utils.StringUtil
 import api.App
 
 

@@ -6,7 +6,7 @@ import groovy.json.JsonSlurper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import prettyprinting.EMFPrettyPrinter
-import yamtl_m2m.StringUtil
+import Utils.StringUtil
 import api.App
 
 /**

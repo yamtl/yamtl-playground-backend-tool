@@ -11,6 +11,7 @@ import prettyprinter.Xmi2ObjectDiagramPlantUML
 import prettyprinter.Emf2Json
 import yamtl_m2m.RunYAMTL_m2m_groovy
 import yamtl_m2m.RunYAMTL_m2m_from_flexible_to_mm
+import query.QueryActivityDslText
 import prettyprinter.Ecore2ClassDiagram
 
 class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -26,6 +27,9 @@ class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxy
                 break
             case '/yamtl_m2m_one_mm':
                 message = RunYAMTL_m2m_from_flexible_to_mm.run(input.getBody())
+                break
+            case '/yamtl_queryDsl':
+                message = QueryActivityDslText.run(input.getBody())
                 break
             case '/ecore2cd':
                 message = Ecore2ClassDiagram.run(input.getBody())

@@ -1,6 +1,7 @@
 package yamtl_m2m
 
 import Utils.Utils
+import Utils.StringUtil
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -30,7 +31,8 @@ class RunYAMTL_m2m_from_flexible_to_mm {
 	 * require modifying this function.
 	 * 
 	 * Parameters:
-	 * metamodel: metamodel
+	 * inModel: flexible model, without metamodel
+	 * outMetamodel: metamodel
 	 * returns response with a field outModel: xmi of output model
 	 */
 	static Object run(String jsonInput) {

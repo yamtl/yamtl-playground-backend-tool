@@ -9,7 +9,7 @@ import groovy.json.JsonSlurper
 import org.junit.Test
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull
-
+import Utils.StringUtil
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject

@@ -1,4 +1,4 @@
-package yamtl_m2m
+package Utils
 
 class StringUtil {
 	def static String removeEscapeChars(String text) {
