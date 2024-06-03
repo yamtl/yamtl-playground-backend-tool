@@ -11,6 +11,7 @@ import prettyprinting.plantuml.EMFPlantUMLSerializer
 import java.io.IOException
 
 import org.eclipse.emf.ecore.EcorePackage
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.EDataType
 import org.eclipse.emf.ecore.EOperation
@@ -39,6 +40,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
+import api.App
 
 import Utils.Utils
 import Utils.StringUtil
@@ -46,13 +48,94 @@ import Utils.StringUtil
 class QueryActivityDslText extends YAMTLModule {
 	private static final Logger logger = LoggerFactory.getLogger(QueryActivityDslText.class);
 	
-	
+
+	def EPackage activityPk
+	def static directory = 'QueryDsl'
+
 	/**
 	 * 
-	 * HELPER CODE
+	 * Function that executes a query over a metamodel-based model.
+	 * 
+	 * The tool function is flexible: query, metamodel and model can be changed.
+	 * 
+	 * Constraints: the query will only execute with the dependencies
+	 * included in this project. Additional dependencies required by new queries
+	 * require modifying this function.
+	 * 
+	 * Parameters:
+	 * metamodel: metamodel
+	 * model: model
+	 * query: text for the query
+	 * returns response in the field output
 	 */
-	def EPackage activityPk
-	
+	static Object run(String jsonInput) {
+		def outputStreamText = ''
+		def errorStreamText = ''
+
+		def request = new JsonSlurper().parseText(jsonInput)
+		def	response = new JsonBuilder()
+		logger.info("Received request: ${request}")
+
+
+		// Load metamodel and model
+		def mmPath = Utils.saveMetamodelToFile(directory, request, "metamodel") - "file:"
+
+		// store model
+		String modelPath = "${App.TMP_DIR}/${directory}/model.xmi"
+		def file = new File(modelPath)
+		if (file.exists()) file.delete()
+		file << StringUtil.removeEscapeChars(request['model'].toString())
+
+
+		logger.info("""METAMODEL: ${new File(mmPath).text}""")
+		logger.info("""MODEL: ${new File(modelPath).text}""")
+
+
+		// Load query text
+		String queryText = StringUtil.removeEscapeChars(request['query'].toString())
+
+		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		GroovyShell shell = new GroovyShell(contextClassLoader);
+		logger.info("GroovyShell ClassLoader: " + contextClassLoader);
+		Map contextArgs = shell.evaluate(queryText)
+
+		// Initialise engine
+		def xform = QueryActivityDslText.createAndConfigure(mmPath, modelPath, contextArgs)
+		logger.info("xform ClassLoader: " + xform.getClass().getClassLoader());
+
+
+		outputStreamText = captureOutput {
+			try {				
+				xform.execute()
+			} catch(Exception e) {
+				errorStreamText = e.message
+			}
+		}
+
+		
+		
+		
+		inspectTmpDirectory()
+
+		logger.info("outputStreamText: ${outputStreamText}");
+		logger.info("errorStreamText: ${errorStreamText}");
+		if (errorStreamText) {
+			response {
+				output 	errorStreamText
+			}
+		} else {
+			response {
+				output	outputStreamText
+			}
+		}
+		logger.info("Generated response: ${response}");
+
+
+		return response
+    }
+
+
+
 	public QueryActivityDslText(EPackage activityPk) {
 		YAMTLGroovyExtensions_dynamicEMF.init(this)
 		this.activityPk=activityPk
@@ -73,61 +156,27 @@ class QueryActivityDslText extends YAMTLModule {
 		])
 	}
 
-	static QueryActivityDslText createAndConfigure(String ecorePath, String xmiPath, String contextArgsStr) {
+	static QueryActivityDslText createAndConfigure(String ecorePath, String xmiPath, Map contextArgs) {
 		def activityRes = QueryActivityDslText.preloadMetamodel(ecorePath)
 		def activityPk = activityRes.getContents().get(0) as EPackage
 		
 		def xform = new QueryActivityDslText(activityPk)
-		YAMTLGroovyExtensions.init(xform)
 		xform.selectedExecutionPhases = ExecutionPhase.MATCH_ONLY
-
+		xform.context(contextArgs)
+		YAMTLGroovyExtensions.init(xform)
+		
 		xform.loadMetamodelResource(activityRes)
 		xform.loadInputModels(['activity': xmiPath])
-		
-		GroovyShell shell = new GroovyShell()
-		Map contextArgs = shell.evaluate(contextArgsStr)
-		xform.context(contextArgs)
-		
+
 		return xform
 	}
 
-	/**
-	 * 
-	 * Function that executes a query over a metamodel-based model.
-	 * 
-	 * The tool function is flexible: query, metamodel and model can be changed.
-	 * 
-	 * Constraints: the query will only execute with the dependencies
-	 * included in this project. Additional dependencies required by new queries
-	 * require modifying this function.
-	 * 
-	 * Parameters:
-	 * metamodel: metamodel
-	 * model: model
-	 * query: text for the query
-	 * returns response in the field output
-	 */
-
-	 
-	static void main(String[] args) {
-		def mmPath = './model-test/education_platform/activity_lang.ecore'
-		def modelPath = './model-test/education_platform/cd2db_activity.xmi'
-		
-		def queryDef = '''[
-			contextType: 'Action',
-			where: { /* it.outputType == 'puml' */ },
-			query: { 
-				println("""
-${it.sourcePanel?.id} |-{${it.sourceButton?.id ?: 'MISSING'}(${
-    it.arguments.collect { it.key + '=' + it.value }.join(', ')
-})}-> ${it.output?.id} [${it.outputConsole?.id ?: ''}]
-""")
-			}
-		]'''
-		
-		def xform = QueryActivityDslText.createAndConfigure(mmPath, modelPath, queryDef)
-		xform.execute()
-	}
+    static void inspectTmpDirectory() {
+        def tmpDir = new File("${App.TMP_DIR}/${directory}")
+        tmpDir.eachFile { file ->
+            logger.info("File in /tmp: ${file.name}, Size: ${file.length()}")
+        }
+    }
 
 
 
@@ -147,50 +196,32 @@ ${it.sourcePanel?.id} |-{${it.sourceButton?.id ?: 'MISSING'}(${
 		return baos.toString("UTF-8")
 	}
 
-	static Object run(String jsonInput) {
-		def outputStreamText = ''
-		def errorStreamText = ''
 
-		def request = new JsonSlurper().parseText(jsonInput)
-		def	response = new JsonBuilder()
-		logger.info("Received request: ${request}")
-
-		outputStreamText = captureOutput {
-			try {
-				def directory = 'QueryDsl'
-				// Load metamodel and model
-				def mmPath = Utils.saveMetamodelToFile(directory, request, "metamodel") - "file:"
-				def modelPath = Utils.saveMetamodelToFile(directory, request, "model") - "file:"
-
-				// Load query text
-				String queryText = StringUtil.removeEscapeChars(request['query'].toString())
-				GroovyShell shell = new GroovyShell()
-				Map contextArgs = shell.evaluate(queryText)
-				
-				// Initialise engine
-				def xform = QueryActivityDslText.createAndConfigure(mmPath, modelPath, queryText)
-				xform.execute()
-				
-
-			} catch(Exception e) {
-				errorStreamText = e.message
+	static void main(String[] args) {
+		def mmPath = './model-test/education_platform/activity_lang.ecore'
+		def modelPath = './model-test/education_platform/cd2db_activity.xmi'
+		
+		def queryDef = '''[
+			contextType: 'Action',
+			where: { /* it.outputType == 'puml' */ },
+			query: { 
+				println("""
+${it.sourcePanel?.id} |-{${it.sourceButton?.id ?: 'MISSING'}(${
+    it.arguments.collect { it.key + '=' + it.value }.join(', ')
+})}-> ${it.output?.id} [${it.outputConsole?.id ?: ''}]
+""")
 			}
-		}
-		logger.info("Generated response: ${outputStreamText}");
-		if (errorStreamText) {
-			response {
-				output 	errorStreamText
-			}
-		} else {
-			response {
-				output	outputStreamText
-			}
-		}
-		logger.info("Generated response: ${response}");
+		]'''
 
+		GroovyShell shell = new GroovyShell()
+		Map contextArgs = shell.evaluate(queryDef)
+		def xform = QueryActivityDslText.createAndConfigure(mmPath, modelPath, contextArgs)
+		xform.execute()
 
-		return response
-    }
+		def resModel = xform.getModelResource('activity')
+		def activityContainer = resModel.contents[0]
+		println(activityContainer.activities.collect{it.actions.collect{it.outputType}})
+	}
 
 }
 

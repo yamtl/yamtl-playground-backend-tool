@@ -150,16 +150,7 @@ class ActivityLoad extends YAMTLModule {
 		
 		xform.saveOutputModels(['activity': './model-test/education_platform/output.xmi'])
 		def outputRes = xform.getModelResource('activity')
-		
-		
-		
-		
-		// TODO: why is puml not displaying contents?
-		def serializer = new EMFPlantUMLSerializer()
-		println(serializer.serialize(
-			EMFPrettyPrinter.convertTreeIteratorToList(
-				outputRes.getAllContents())
-		))
+	
 	}
 	
 
