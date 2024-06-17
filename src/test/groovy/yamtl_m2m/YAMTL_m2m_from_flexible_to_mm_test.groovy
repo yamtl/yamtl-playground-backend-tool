@@ -18,14 +18,14 @@ class YAMTL_m2m_from_flexible_to_mm_test
  {
 
     @Test
-	public void test_cd2db() {
+	public void test_yaml_to_activity() {
 		App app = new App();
 
 		def requestBuilder = new JsonBuilder()
 		requestBuilder {
-			trafoGroovy  new File('./model/ActivityLoad.groovy').text
+			trafoGroovy  new File('./model/ActivityAndToolLoad.groovy').text
 			inModel      new File('./model/cd2db_activity.yml').text
-			outMetamodel  new File('./model/activity_lang.emf').text
+			outMetamodel  new File('./model/activity_and_tool_lang.emf').text
 		}
 
 
@@ -47,9 +47,13 @@ class YAMTL_m2m_from_flexible_to_mm_test
 
 		def jsonSlurper = new JsonSlurper()
 		def response = jsonSlurper.parseText(content);
+
+		// new File('./model/output.xmi') << response['generatedText'].toString()
+
 		// Check the result
-		def expectedOutput = new File('./model/cd2db_activity.xmi').text
+		def expectedOutput = new File('./model/expected_output_cd2db_activity.xmi').text
 		assertEquals(normalize(expectedOutput), normalize(StringUtil.removeEscapeChars( response['generatedText'].toString()) ))
+
 	}
 
 	  def static normalize(text) {

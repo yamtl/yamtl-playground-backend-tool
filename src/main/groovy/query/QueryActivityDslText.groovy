@@ -7,7 +7,6 @@ import java.nio.file.Paths
 import java.util.Map
 import java.util.function.Supplier
 import org.junit.jupiter.api.Assertions
-import prettyprinting.plantuml.EMFPlantUMLSerializer
 import java.io.IOException
 
 import org.eclipse.emf.ecore.EcorePackage
