@@ -25,7 +25,7 @@ class QueryDsl_test {
 		def requestBuilder = new JsonBuilder()
 		requestBuilder {
 			metamodel  new File('./model/activity_lang.emf').text
-			model      new File('./model/cd2db_activity.xmi').text
+			model      new File('./model/expected_output_cd2db_activity.xmi').text
 			query	   '''[
 	contextType: 'Action',
 	where: { it.outputType == 'puml' },
